@@ -6,9 +6,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.SystemColor;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import javax.swing.JTextField;
+
+import com.hotel.controller.ReservaController;
+import com.hotel.model.Reserva;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Font;
 import javax.swing.JComboBox;
@@ -17,6 +21,8 @@ import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -27,7 +33,11 @@ import java.awt.Toolkit;
 public class Reservas extends JFrame {
 
 	private JPanel contentPane;
+	private JDateChooser txtFechaE;
+	private JDateChooser txtFechaS;	
 	private JTextField txtValor;
+	private JComboBox txtFormaPago;
+	private ReservaController reservaController;
 
 	/**
 	 * Launch the application.
@@ -67,7 +77,8 @@ public class Reservas extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JDateChooser txtFechaE = new JDateChooser();
+		txtFechaE = new JDateChooser();
+		txtFechaE.setDateFormatString("yyyy-MM-dd");
 		txtFechaE.setBounds(88, 166, 235, 33);
 		panel.add(txtFechaE);
 		
@@ -81,7 +92,8 @@ public class Reservas extends JFrame {
 		lblNewLabel_1_1.setFont(new Font("Arial", Font.PLAIN, 14));
 		panel.add(lblNewLabel_1_1);
 		
-		JDateChooser txtFechaS = new JDateChooser();
+		txtFechaS = new JDateChooser();
+		txtFechaS.setDateFormatString("yyyy-MM-dd");
 		txtFechaS.setBounds(88, 234, 235, 33);
 		txtFechaS.getCalendarButton().setBackground(Color.WHITE);
 		panel.add(txtFechaS);
@@ -97,7 +109,7 @@ public class Reservas extends JFrame {
 		lblNewLabel_1_1_1.setFont(new Font("Arial", Font.PLAIN, 14));
 		panel.add(lblNewLabel_1_1_1);
 		
-		JComboBox txtFormaPago = new JComboBox();
+		txtFormaPago = new JComboBox();
 		txtFormaPago.setBounds(88, 373, 235, 33);
 		txtFormaPago.setFont(new Font("Arial", Font.PLAIN, 14));
 		txtFormaPago.setModel(new DefaultComboBoxModel(new String[] {"Tarjeta de Crédito", "Tarjeta de Débito", "Dinero en efectivo"}));
@@ -117,9 +129,10 @@ public class Reservas extends JFrame {
 		JButton btnReservar = new JButton("Continuar");
 		btnReservar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegistroHuesped huesped = new RegistroHuesped();
-				huesped.setVisible(true);
-				dispose();
+				guardar();
+//				RegistroHuesped huesped = new RegistroHuesped();
+//				huesped.setVisible(true);
+//				dispose();
 			}
 		});
 		btnReservar.setForeground(Color.WHITE);
@@ -145,7 +158,27 @@ public class Reservas extends JFrame {
 		lblNewLabel_2.setIcon(new ImageIcon(Reservas.class.getResource("/imagenes/Ha-100px.png")));
 		lblNewLabel_2.setBounds(15, 6, 104, 107);
 		panel.add(lblNewLabel_2);
+		
+		try {
+			this.reservaController = new ReservaController();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
+	
+	private void guardar() {
+		String fechaEntrada = ((JTextField)txtFechaE.getDateEditor().getUiComponent()).getText();
+		String fechaSalida = ((JTextField)txtFechaS.getDateEditor().getUiComponent()).getText();
+		String valor = txtValor.getText();
+		String formaPago = txtFormaPago.getSelectedItem().toString();
+		
+		Reserva reserva = new Reserva(java.sql.Date.valueOf(fechaEntrada), java.sql.Date.valueOf(fechaSalida), valor, formaPago);
+		this.reservaController.guardar(reserva);
+		
+		JOptionPane.showMessageDialog(this, "Guardado");
+	}
+	
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
