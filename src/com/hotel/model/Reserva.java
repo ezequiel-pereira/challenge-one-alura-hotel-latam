@@ -4,6 +4,7 @@
 package com.hotel.model;
 
 import java.sql.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author ezequiel
@@ -15,6 +16,7 @@ public class Reserva {
 	private Date fechaSalida;
 	private String valor;
 	private String formaPago;
+	private final Double tarifa = 1000.0;
 	
 	public Reserva(Date fechaEntrada, Date fechaSalida, String valor, String formaPago) {
 		super();
@@ -22,6 +24,21 @@ public class Reserva {
 		this.fechaSalida = fechaSalida;
 		this.valor = valor;
 		this.formaPago = formaPago;
+	}
+	
+	public Reserva(Date fechaEntrada, Date fechaSalida) {
+		super();
+		this.fechaEntrada = fechaEntrada;
+		this.fechaSalida = fechaSalida;
+		this.valor = this.calcularValor();
+	}
+
+	public String calcularValor() {
+		Long valorCalculado;
+		valorCalculado = fechaSalida.getTime() - fechaEntrada.getTime();
+		valorCalculado = TimeUnit.DAYS.convert(valorCalculado, TimeUnit.MILLISECONDS);
+		valorCalculado = (long) (valorCalculado * tarifa);
+		return valorCalculado.toString();
 	}
 
 	/**
@@ -46,10 +63,24 @@ public class Reserva {
 	}
 
 	/**
+	 * @param fechaEntrada the fechaEntrada to set
+	 */
+	public void setFechaEntrada(Date fechaEntrada) {
+		this.fechaEntrada = fechaEntrada;
+	}
+
+	/**
 	 * @return the fechaSalida
 	 */
 	public Date getFechaSalida() {
 		return fechaSalida;
+	}
+
+	/**
+	 * @param fechaSalida the fechaSalida to set
+	 */
+	public void setFechaSalida(Date fechaSalida) {
+		this.fechaSalida = fechaSalida;
 	}
 
 	/**
@@ -60,9 +91,31 @@ public class Reserva {
 	}
 
 	/**
+	 * @param valor the valor to set
+	 */
+	public void setValor(String valor) {
+		this.valor = valor;
+	}
+
+	/**
 	 * @return the formaPago
 	 */
 	public String getFormaPago() {
 		return formaPago;
 	}
+
+	/**
+	 * @param formaPago the formaPago to set
+	 */
+	public void setFormaPago(String formaPago) {
+		this.formaPago = formaPago;
+	}
+
+	/**
+	 * @return the tarifa
+	 */
+	public Double getTarifa() {
+		return tarifa;
+	}
+
 }
