@@ -23,7 +23,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.SQLException;
 import java.util.Calendar;
 import java.sql.Date;
 
@@ -158,10 +157,10 @@ public class Reservas extends JFrame {
 		JButton btnReservar = new JButton("Continuar");
 		btnReservar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				guardar();
-//				RegistroHuesped huesped = new RegistroHuesped();
-//				huesped.setVisible(true);
-//				dispose();
+				Reserva reservaBtn = guardar();
+				RegistroHuesped huesped = new RegistroHuesped(reservaBtn);
+				huesped.setVisible(true);
+				dispose();
 			}
 		});
 		btnReservar.setForeground(Color.WHITE);
@@ -188,12 +187,7 @@ public class Reservas extends JFrame {
 		lblNewLabel_2.setBounds(15, 6, 104, 107);
 		panel.add(lblNewLabel_2);
 
-		try {
-			this.reservaController = new ReservaController();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		this.reservaController = new ReservaController();
 	}
 
 	private void actualizarValor() {
@@ -205,7 +199,7 @@ public class Reservas extends JFrame {
 		txtValor.setText(reserva2.getValor());
 	}
 
-	private void guardar() {
+	private Reserva guardar() {
 		String fechaEntrada = ((JTextField) txtFechaE.getDateEditor().getUiComponent()).getText();
 		String fechaSalida = ((JTextField) txtFechaS.getDateEditor().getUiComponent()).getText();
 		Date fechaEntradaDate = java.sql.Date.valueOf(fechaEntrada);
@@ -216,6 +210,7 @@ public class Reservas extends JFrame {
 		this.reservaController.guardar(reserva);
 
 		JOptionPane.showMessageDialog(this, "Guardado");
+		return reserva;
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
