@@ -3,8 +3,6 @@
  */
 package com.hotel.controller;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import com.hotel.dao.ReservaDAO;
 import com.hotel.factory.CrearConexion;
@@ -17,10 +15,9 @@ import com.hotel.model.Reserva;
 public class ReservaController {
 	private ReservaDAO reservaDAO;
 	
-	public ReservaController() throws SQLException {
-		Connection conexion = new CrearConexion().crearConexion();
-		conexion.setAutoCommit(false);
-		this.reservaDAO = new ReservaDAO(conexion);
+	public ReservaController() {
+		CrearConexion conexion = new CrearConexion();
+		this.reservaDAO = new ReservaDAO(conexion.crearConexion());
 	}
 	
 	public void guardar(Reserva reserva) {
