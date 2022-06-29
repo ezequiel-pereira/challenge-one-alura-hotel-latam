@@ -40,8 +40,6 @@ public class Reservas extends JFrame {
 	private JTextField txtValor;
 	private JComboBox txtFormaPago;
 	private ReservaController reservaController;
-	private Reserva reserva;
-
 	/**
 	 * Launch the application.
 	 */

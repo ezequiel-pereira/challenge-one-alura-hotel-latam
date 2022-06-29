@@ -3,6 +3,7 @@
  */
 package com.hotel.controller;
 
+import java.util.ArrayList;
 import com.hotel.dao.HuespedDAO;
 import com.hotel.factory.CrearConexion;
 import com.hotel.model.Huesped;
@@ -21,6 +22,10 @@ public class HuespedController {
 	
 	public void guardar(Huesped huesped) {
 		this.huespedDAO.guardar(huesped);
+	}
+	
+	public ArrayList<Huesped> listar() {
+		return this.huespedDAO.listar();
 	}
 
 }

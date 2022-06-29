@@ -33,6 +33,19 @@ public class Reserva {
 		this.valor = this.calcularValor();
 	}
 
+	public Reserva() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Reserva(Integer id, Date fechaEntrada, Date fechaSalida, String valor, String formaPago) {
+		super();
+		this.id = id;
+		this.fechaEntrada = fechaEntrada;
+		this.fechaSalida = fechaSalida;
+		this.valor = valor;
+		this.formaPago = formaPago;
+	}
+
 	public String calcularValor() {
 		Long valorCalculado;
 		valorCalculado = fechaSalida.getTime() - fechaEntrada.getTime();
