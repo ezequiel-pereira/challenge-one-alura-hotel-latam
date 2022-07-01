@@ -3,6 +3,7 @@
  */
 package com.hotel.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import com.hotel.dao.HuespedDAO;
 import com.hotel.factory.CrearConexion;
@@ -26,6 +27,11 @@ public class HuespedController {
 	
 	public ArrayList<Huesped> listar() {
 		return this.huespedDAO.listar();
+	}
+
+	public int modificar(Integer id, String nombre, String apellido, Date fechaNacimiento, String nacionalidad,
+			String telefono, Integer idReserva) {
+		return this.huespedDAO.modificar(id, nombre, apellido, fechaNacimiento, nacionalidad, telefono, idReserva);
 	}
 
 }

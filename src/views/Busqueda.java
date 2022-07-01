@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
@@ -97,6 +98,11 @@ public class Busqueda extends JFrame {
 		btnEditar.setIcon(new ImageIcon(Busqueda.class.getResource("/imagenes/editar-texto.png")));
 		btnEditar.setBackground(SystemColor.menu);
 		btnEditar.setBounds(587, 416, 54, 41);
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modificar();
+			}
+		});
 		contentPane.add(btnEditar);
 
 		JLabel lblNewLabel_4 = new JLabel("Sistema de Búsqueda");
@@ -124,7 +130,6 @@ public class Busqueda extends JFrame {
 		panel.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent evt) {
 				JTabbedPane pane = (JTabbedPane) evt.getSource();
-
 				tablaSeleccionada = pane.getSelectedIndex();
 			}
 		});
@@ -245,6 +250,44 @@ public class Busqueda extends JFrame {
 		reservasTabla.forEach(reserva -> modeloReserva.addRow(new Object[] { reserva.getId(), reserva.getFechaEntrada(),
 				reserva.getFechaSalida(), reserva.getValor(), reserva.getFormaPago() }));
 		tbReservas.updateUI();
+	}
+
+	private void modificar() {
+		if (tablaSeleccionada == 0) {
+			modificarHuesped();
+		} else if (tablaSeleccionada == 1) {
+			modificarReserva();
+		}
+	}
+
+	private void modificarHuesped() {
+		Integer filaSeleccionada = tbHuespedes.getSelectedRow();
+
+		Integer id = (Integer) modeloHuesped.getValueAt(filaSeleccionada, 0);
+		String nombre = (String) modeloHuesped.getValueAt(filaSeleccionada, 1);
+		String apellido = (String) modeloHuesped.getValueAt(filaSeleccionada, 2);
+		Date fechaNacimiento = java.sql.Date.valueOf((String) modeloHuesped.getValueAt(filaSeleccionada, 3));
+		String nacionalidad = (String) modeloHuesped.getValueAt(filaSeleccionada, 4);
+		String telefono = (String) modeloHuesped.getValueAt(filaSeleccionada, 5);
+		Integer idReserva = (Integer) modeloHuesped.getValueAt(filaSeleccionada, 6);
+
+		var modificado = this.huespedController.modificar(id, nombre, apellido, fechaNacimiento, nacionalidad, telefono, idReserva);
+		obtenerHuespedes();
+		JOptionPane.showMessageDialog(this, String.format("%d item modificado con éxito!", modificado));
+	}
+	
+	private void modificarReserva() {
+		Integer filaSeleccionada = tbReservas.getSelectedRow();
+
+		Integer id = (Integer) modeloReserva.getValueAt(filaSeleccionada, 0);
+		Date fechaEntrada = java.sql.Date.valueOf((String) modeloReserva.getValueAt(filaSeleccionada, 1));
+		Date fechaSalida = java.sql.Date.valueOf((String) modeloReserva.getValueAt(filaSeleccionada, 2));
+		String valor = (String) modeloReserva.getValueAt(filaSeleccionada, 3);
+		String formaPago = (String) modeloReserva.getValueAt(filaSeleccionada, 4);
+
+		var modificado = this.reservaController.modificar(id, fechaEntrada, fechaSalida, valor, formaPago);
+		obtenerReservas();
+		JOptionPane.showMessageDialog(this, String.format("%d item modificado con éxito!", modificado));
 	}
 
 }

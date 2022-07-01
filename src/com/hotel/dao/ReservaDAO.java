@@ -1,6 +1,7 @@
 package com.hotel.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ public class ReservaDAO {
 	}
 
 	public void guardar(Reserva reserva) {
-		try(conexion) {
+		try {
 			String consulta = "INSERT INTO hotel.reservas (fecha_entrada, fecha_salida, valor, forma_pago) VALUES (?, ?, ?, ?)";
 			try (PreparedStatement ps = conexion.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS)) {
 				ps.setDate(1, reserva.getFechaEntrada());
@@ -40,7 +41,7 @@ public class ReservaDAO {
 	public List<Reserva> listar() {
 		List<Reserva> reservas = new ArrayList<>();
 
-		try (conexion) {
+		try {
 			String consulta = "SELECT id, fecha_entrada, fecha_salida, valor, forma_pago FROM hotel.reservas";
 			try (PreparedStatement ps = conexion.prepareStatement(consulta)) {
 				ps.execute();
@@ -60,6 +61,25 @@ public class ReservaDAO {
 			e.printStackTrace();
 		}
 		return reservas;
+	}
+
+	public int modificar(Integer id, Date fechaEntrada, Date fechaSalida, String valor, String formaPago) {
+		try {
+			String consulta = "UPDATE hotel.reservas SET fecha_entrada = ?, fecha_salida = ?, valor = ?, forma_pago = ? WHERE id = ?";
+			try (PreparedStatement ps = conexion.prepareStatement(consulta)) {
+				ps.setDate(1, fechaEntrada);
+				ps.setDate(2, fechaSalida);
+				ps.setString(3, valor);
+				ps.setString(4, formaPago);
+				ps.execute();
+				
+				int updateCount = ps.getUpdateCount();
+                return updateCount;
+			}	
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
 	}
 
 }
