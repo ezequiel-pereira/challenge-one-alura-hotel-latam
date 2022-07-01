@@ -85,4 +85,20 @@ public class HuespedDAO {
 		}
 	}
 
+	public int eliminar(Integer id) {
+		try  {
+			String consulta = "DELETE FROM hotel.huespedes WHERE id = ?";
+			PreparedStatement ps = conexion.prepareStatement(consulta);
+			try (ps) {
+				ps.setInt(1, id);
+				ps.execute();
+				
+				int updateCount = ps.getUpdateCount();
+                return updateCount;
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException();
+		}
+	}
+
 }

@@ -34,4 +34,8 @@ public class HuespedController {
 		return this.huespedDAO.modificar(id, nombre, apellido, fechaNacimiento, nacionalidad, telefono, idReserva);
 	}
 
+	public int eliminado(Integer id) {
+		return this.huespedDAO.eliminar(id);
+	}
+
 }

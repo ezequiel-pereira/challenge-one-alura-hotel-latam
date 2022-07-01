@@ -32,7 +32,11 @@ public class ReservaController {
 	}
 
 	public int modificar(Integer id, Date fechaEntrada, Date fechaSalida, String valor, String formaPago) {
-		return reservaDAO.modificar(id, fechaEntrada, fechaSalida, valor, formaPago);
+		return this.reservaDAO.modificar(id, fechaEntrada, fechaSalida, valor, formaPago);
+	}
+
+	public int eliminado(Integer id) {
+		return this.reservaDAO.eliminar(id);
 	}
 
 }

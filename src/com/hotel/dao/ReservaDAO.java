@@ -71,13 +71,28 @@ public class ReservaDAO {
 				ps.setDate(2, fechaSalida);
 				ps.setString(3, valor);
 				ps.setString(4, formaPago);
+				ps.setInt(5, id);
 				ps.execute();
 				
 				int updateCount = ps.getUpdateCount();
                 return updateCount;
 			}	
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
+	public int eliminar(Integer id) {
+		try {
+			String consulta = "DELETE FROM hotel.reservas WHERE id = ?";
+			try (PreparedStatement ps = conexion.prepareStatement(consulta)) {
+				ps.setInt(1, id);
+				ps.execute();
+				
+				int updateCount = ps.getUpdateCount();
+                return updateCount;
+			}	
+		} catch (SQLException e) {
 			throw new RuntimeException();
 		}
 	}

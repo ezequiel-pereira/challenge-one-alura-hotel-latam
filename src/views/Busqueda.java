@@ -164,6 +164,11 @@ public class Busqueda extends JFrame {
 		btnEliminar.setIcon(new ImageIcon(Busqueda.class.getResource("/imagenes/deletar.png")));
 		btnEliminar.setBackground(SystemColor.menu);
 		btnEliminar.setBounds(651, 416, 54, 41);
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				eliminar();
+			}
+		});
 		contentPane.add(btnEliminar);
 
 		JButton btnCancelar = new JButton("");
@@ -252,6 +257,33 @@ public class Busqueda extends JFrame {
 		tbReservas.updateUI();
 	}
 
+	private void eliminar() {
+		if (tablaSeleccionada == 0) {
+			eliminarHuesped();
+		} else if (tablaSeleccionada == 1) {
+			eliminarReserva();
+		}
+	}
+
+	private void eliminarHuesped() {
+		Integer filaSeleccionada = tbHuespedes.getSelectedRow();
+
+		Integer id = (Integer) modeloHuesped.getValueAt(filaSeleccionada, 0);
+
+		var eliminado = this.huespedController.eliminado(id);
+		obtenerHuespedes();
+		JOptionPane.showMessageDialog(this, String.format("%d item eliminado!", eliminado));
+	}
+	
+	private void eliminarReserva() {
+		Integer filaSeleccionada = tbReservas.getSelectedRow();
+
+		Integer id = (Integer) modeloReserva.getValueAt(filaSeleccionada, 0);
+		var eliminado = this.reservaController.eliminado(id);
+		obtenerReservas();
+		JOptionPane.showMessageDialog(this, String.format("%d item eliminado con éxito!", eliminado));
+	}
+	
 	private void modificar() {
 		if (tablaSeleccionada == 0) {
 			modificarHuesped();
